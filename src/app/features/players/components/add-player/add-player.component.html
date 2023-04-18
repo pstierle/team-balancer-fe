@@ -1,0 +1,25 @@
+<mat-expansion-panel>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <span>Add new Player</span>
+      <mat-icon>account_circle</mat-icon>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+  <form [formGroup]="playerForm" (submit)="submit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" />
+      <mat-error> Between 3 and 8 Chars </mat-error>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!playerForm.valid"
+    >
+      Add
+    </button>
+  </form>
+</mat-expansion-panel>

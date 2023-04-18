@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="scrollable">
+    <mat-expansion-panel *ngFor="let player of players$ | async">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span>{{ player.name }}</span>
+          <button mat-icon-button (click)="deletePlayer(player.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <form
+        *ngIf="getPlayerFormByPlayerId(player.id) as playerForm"
+        [formGroup]="playerForm"
+        (submit)="updatePlayerName(player.id, playerForm)"
+      >
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" />
+          <mat-error> Between 3 and 8 Chars </mat-error>
+        </mat-form-field>
+
+        <button
+          mat-stroked-button
+          color="primary"
+          type="submit"
+          [disabled]="!playerForm.valid || !playerForm.touched"
+        >
+          Update Name
+        </button>
+      </form>
+
+      <div *ngFor="let game of player.games">
+        <h4>{{ game.baseGame.name }}</h4>
+        <form
+          *ngIf="getGameFormByGameId(game.id) as gameForm"
+          [formGroup]="gameForm"
+          (submit)="updatePlayerGameElo(player.id, game.id, gameForm)"
+        >
+          <mat-form-field appearance="outline">
+            <mat-label>Elo</mat-label>
+            <input matInput formControlName="elo" />
+            <mat-error> Between 0 and 10 </mat-error>
+          </mat-form-field>
+          <button
+            mat-stroked-button
+            color="primary"
+            type="submit"
+            [disabled]="!gameForm.valid || !gameForm.touched"
+          >
+            Update Elo
+          </button>
+        </form>
+      </div>
+    </mat-expansion-panel>
+  </div>
+</div>
