@@ -6,8 +6,6 @@ export class GlobalErrorHandler implements ErrorHandler {
   constructor(private router: Router, private zone: NgZone) {}
 
   handleError(error: any) {
-    if (error?.error?.statusCode === 401) {
-      this.zone.run(() => this.router.navigate([appRoutes.auth]));
-    }
+    this.zone.run(() => this.router.navigate([appRoutes.auth]));
   }
 }

@@ -1,0 +1,10 @@
+<div class="player-container">
+  <button
+    mat-stroked-button
+    *ngFor="let player of players$ | async"
+    (click)="selectPlayer(player)"
+    [disabled]="disableAdd"
+  >
+    {{ player.name }}
+  </button>
+</div>

@@ -35,7 +35,6 @@ export class AddPlayerComponent implements OnInit {
       try {
         await this.apiService.createPlayer(this.playerForm.controls.name.value);
         await this.apiService.getPlayers();
-        this.expansionPanel.close();
         this.playerForm.controls.name.patchValue('');
         this.playerForm.controls.name.markAsUntouched();
         this.playerForm.controls.name.setErrors(null);

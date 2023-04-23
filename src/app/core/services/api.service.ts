@@ -2,8 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { endpoints } from '../constants/endpoints.constant';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Player } from '../models/player';
+import { BaseGame } from '../models/base-game';
+import { GenerateTeamsResponse } from '../models/generate-teams-response';
 
 @Injectable({
   providedIn: 'root',
@@ -24,17 +26,25 @@ export class ApiService {
     window.location.href = `${environment.apiUrl}/${endpoints.auth.basePath}/${endpoints.auth.login}`;
   }
 
-  public async validateToken(): Promise<void> {
-    await this.httpClient
-      .get(
-        `${environment.apiUrl}/${endpoints.auth.basePath}/${endpoints.auth.validateToken}/${this.accessToken}`
-      )
-      .toPromise();
+  public getBaseGames$(): Observable<BaseGame[]> {
+    return this.httpClient.get<BaseGame[]>(
+      `${environment.apiUrl}/${endpoints.baseGame.basePath}`,
+      {
+        headers: this.authHeader,
+      }
+    );
   }
 
-  public getBaseGames$(): any {
-    return this.httpClient.get(
-      `${environment.apiUrl}/${endpoints.baseGame.basePath}`,
+  public generateTeams$(
+    baseGameId: number,
+    playerIds: string[]
+  ): Observable<GenerateTeamsResponse> {
+    return this.httpClient.post<GenerateTeamsResponse>(
+      `${environment.apiUrl}/${endpoints.baseGame.basePath}/${endpoints.baseGame.generateTeams}`,
+      {
+        baseGameId,
+        playerIds,
+      },
       {
         headers: this.authHeader,
       }
@@ -62,7 +72,9 @@ export class ApiService {
       })
       .toPromise();
 
-    this.players$.next(players ?? []);
+    this.players$.next(
+      players?.sort((a, b) => a.name.localeCompare(b.name)) ?? []
+    );
   }
 
   public async updatePlayer(

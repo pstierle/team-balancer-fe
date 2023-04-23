@@ -1,12 +1,79 @@
-.container {
-  height: calc(100vh - 500px);
+.scrollable {
+  max-height: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
   overflow: auto;
+  padding: 5px;
+  max-width: 589px;
+  align-items: center;
+  justify-content: flex-start;
+
+  .player {
+    display: flex;
+    flex-direction: column;
+    border: solid 1px rgba(255, 255, 255, 0.12);
+    border-radius: 3px;
+    padding: 8px;
+
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .player-name {
+        color: white;
+        font-weight: 500;
+      }
+      mat-icon {
+        width: 28px;
+        height: 28px;
+      }
+      mat-icon:hover {
+        cursor: pointer;
+      }
+    }
+
+    .games {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+
+      .game {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+
+        input {
+          width: 22px;
+          height: 22px;
+          text-align: center;
+          background: transparent;
+          border: solid 1px rgba(255, 255, 255, 0.12);
+          color: white;
+          border-radius: 3px;
+        }
+
+        input:focus {
+          outline: none;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        input[type="number"] {
+          -moz-appearance: textfield;
+        }
+      }
+    }
+  }
 }
 
-.scrollable {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+mat-expansion-panel {
+  margin: 5px 0px;
 }
 
 mat-panel-title {
@@ -20,4 +87,9 @@ form {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.game-container {
+  display: flex;
+  gap: 15px;
 }

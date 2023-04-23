@@ -1,0 +1,19 @@
+<div class="container">
+  <div
+    *ngFor="let map of mapList; let i = index"
+    [id]="'map-' + i"
+    class="map"
+    [class.highlight]="highlightedMapIndex === i"
+  >
+    <span [class.text-accent]="highlightedMapIndex === i">{{ map.name }}</span>
+    <img [src]="map.image" alt="map" />
+  </div>
+</div>
+<button
+  mat-stroked-button
+  color="primary"
+  (click)="highlightRandomMap()"
+  *ngIf="mapList.length > 0"
+>
+  Random
+</button>

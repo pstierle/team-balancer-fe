@@ -1,22 +1,10 @@
 <mat-toolbar>
-  <button
-    mat-icon-button
-    class="example-icon"
-    aria-label="Example icon-button with menu icon"
-    (click)="sidenav.toggle()"
-  >
+  <button mat-icon-button (click)="sidenav.toggle()">
     <mat-icon>menu</mat-icon>
   </button>
   <span>Team Balancer</span>
-  <span class="example-spacer"></span>
-  <button
-    mat-raised-button
-    class="example-icon favorite-icon"
-    aria-label="Example icon-button with heart icon"
-    (click)="login()"
-  >
-    Login
-  </button>
+  <span class="spacer"></span>
+  <button mat-raised-button (click)="login()">Login</button>
 </mat-toolbar>
 <mat-sidenav-container>
   <mat-sidenav #sidenav mode="over" [(opened)]="sideNavOpen">

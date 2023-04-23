@@ -1,4 +1,48 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  color: rgb(190, 190, 190);
+}
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: bold;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(59, 59, 59);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #292929;
+}
+
+.mat-card,
+.mat-expansion-panel,
+.mat-drawer-inner-container {
+  background-color: rgb(53, 53, 53);
+}
+
+.text-accent {
+  color: white;
+  font-weight: 500;
+}

@@ -1,0 +1,49 @@
+mat-card {
+  width: 500px;
+
+  mat-card-header {
+    .header {
+      width: 100%;
+      text-align: center;
+    }
+  }
+  mat-card-content {
+    height: 244px;
+    .teams-container {
+      display: flex;
+      gap: 10px;
+      .team {
+        width: 50%;
+        height: 100%;
+        h3 {
+          text-align: center;
+        }
+        .player-container {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+
+          button {
+            width: 100%;
+
+            .content {
+              display: flex;
+              flex-wrap: nowrap;
+              justify-content: space-between;
+              align-items: center;
+            }
+          }
+        }
+      }
+    }
+  }
+  mat-card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  ::ng-deep .mat-form-field-wrapper {
+    padding: 0px;
+  }
+}

@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
   public async ngOnInit(): Promise<void> {
     const accessToken = localStorage.getItem('access_token');
     this.apiService.accessToken = accessToken ?? '';
-    await this.apiService.validateToken();
   }
 
   public login(): void {
