@@ -17,6 +17,8 @@ export class MapsListComponent {
     this.highlightedMapIndex = randomIndex;
     document.getElementById('map-' + randomIndex)?.scrollIntoView({
       behavior: 'smooth',
+      block: 'center',
+      inline: 'center',
     });
   }
 }
