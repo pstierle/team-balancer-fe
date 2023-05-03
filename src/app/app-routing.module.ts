@@ -16,7 +16,9 @@ const routes: Routes = [
   {
     path: appRoutes.players,
     loadChildren: () =>
-      import('./features/players/players.module').then((m) => m.PlayersModule),
+      import('./features/manage-players/manage-players.module').then(
+        (m) => m.ManagePlayersModule
+      ),
   },
   {
     path: appRoutes.balancer,

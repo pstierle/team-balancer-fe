@@ -6,10 +6,7 @@
         <mat-icon (click)="deletePlayer(player.id)">delete</mat-icon>
       </div>
       <div class="games">
-        <div
-          class="game"
-          *ngFor="let game of getSortedPlayerGames(player.games)"
-        >
+        <div class="game" *ngFor="let game of player.games">
           <span>{{ game.baseGame.name }}:</span>
           <input
             type="number"

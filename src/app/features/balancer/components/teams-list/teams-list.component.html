@@ -2,31 +2,33 @@
   <mat-card-content>
     <div class="teams-container">
       <div class="team">
-        <h3 class="text-accent">First Team</h3>
         <div class="player-container">
           <button
-            *ngFor="let player of firstTeamPlayers$ | async"
+            *ngFor="let player of firstTeam$ | async"
             mat-stroked-button
             (click)="removePlayer(player)"
           >
             <div class="content">
               <span>{{ player.name }}</span>
-              <span class="text-accent">{{ getElo(player) }}</span>
+              <span class="text-accent" [appPlayerElo]="getElo$(player)">{{
+                getElo$(player) | async
+              }}</span>
             </div>
           </button>
         </div>
       </div>
       <div class="team">
-        <h3 class="text-accent">Second Team</h3>
         <div class="player-container">
           <button
-            *ngFor="let player of secondTeamPlayers$ | async"
+            *ngFor="let player of secondTeam$ | async"
             mat-stroked-button
             (click)="removePlayer(player)"
           >
             <div class="content">
               <span>{{ player.name }}</span>
-              <span class="text-accent">{{ getElo(player) }}</span>
+              <span class="text-accent" [appPlayerElo]="getElo$(player)">{{
+                getElo$(player) | async
+              }}</span>
             </div>
           </button>
         </div>
@@ -34,24 +36,24 @@
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <mat-form-field appearance="outline">
-      <mat-label>Selected Game</mat-label>
-      <mat-select (selectionChange)="handleBaseGameChange($event)">
-        <mat-option
+    <div class="actions">
+      <mat-chip-list>
+        <mat-chip
           *ngFor="let baseGame of baseGames$ | async"
-          [value]="baseGame.id"
+          [selected]="(selectedBaseGameId$ | async) === baseGame.id"
+          (click)="handleBaseGameChange(baseGame.id)"
         >
           {{ baseGame.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <button
-      mat-stroked-button
-      color="primary"
-      [disabled]="!(canShuffle$ | async)"
-      (click)="generateTeams()"
-    >
-      Generate Teams
-    </button>
+        </mat-chip>
+      </mat-chip-list>
+      <button
+        mat-stroked-button
+        color="primary"
+        [disabled]="!(canShuffle$ | async)"
+        (click)="generateTeams()"
+      >
+        Generate Teams
+      </button>
+    </div>
   </mat-card-actions>
 </mat-card>

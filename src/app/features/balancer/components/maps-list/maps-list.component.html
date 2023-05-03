@@ -1,6 +1,6 @@
 <div class="container">
   <div
-    *ngFor="let map of mapList; let i = index"
+    *ngFor="let map of mapList$ | async; let i = index"
     [id]="'map-' + i"
     class="map"
     [class.highlight]="highlightedMapIndex === i"
@@ -9,11 +9,6 @@
     <img [src]="map.image" alt="map" />
   </div>
 </div>
-<button
-  mat-stroked-button
-  color="primary"
-  (click)="highlightRandomMap()"
-  *ngIf="mapList.length > 0"
->
+<button mat-stroked-button color="primary" (click)="highlightRandomMap()">
   Random
 </button>

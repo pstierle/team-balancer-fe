@@ -1,6 +1,4 @@
 mat-card {
-  width: 500px;
-
   mat-card-header {
     .header {
       width: 100%;
@@ -8,16 +6,13 @@ mat-card {
     }
   }
   mat-card-content {
-    height: 244px;
     .teams-container {
       display: flex;
+      flex-direction: column;
       gap: 10px;
       .team {
-        width: 50%;
-        height: 100%;
-        h3 {
-          text-align: center;
-        }
+        padding: 20px;
+
         .player-container {
           display: flex;
           flex-direction: column;
@@ -38,12 +33,16 @@ mat-card {
     }
   }
   mat-card-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      gap: 20px;
 
-  ::ng-deep .mat-form-field-wrapper {
-    padding: 0px;
+      mat-chip {
+        cursor: pointer;
+      }
+    }
   }
 }

@@ -1,17 +1,14 @@
-import {
-  Observable,
-  map,
-  BehaviorSubject,
-  combineLatest,
-  take,
-  mergeMap,
-  of,
-} from 'rxjs';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Observable, map } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { Player } from 'src/app/core/models/player';
 import { BaseGame } from 'src/app/core/models/base-game';
-import { ApiService } from 'src/app/core/services/api.service';
-import { MatSelectChange } from '@angular/material/select';
+import { Select, Store } from '@ngxs/store';
+import {
+  BalancerStateSelectors,
+  GenerateTeams,
+  RemovePlayer,
+  SelectBaseGame,
+} from 'src/app/state/balancer.state';
 
 @Component({
   selector: 'app-teams-list',
@@ -19,80 +16,43 @@ import { MatSelectChange } from '@angular/material/select';
   styleUrls: ['./teams-list.component.scss'],
 })
 export class TeamsListComponent implements OnInit {
-  @Input()
-  public players$!: Observable<Player[]>;
+  @Select(BalancerStateSelectors.getFirstTeam)
+  public firstTeam$!: Observable<Player[]>;
 
-  public firstTeamPlayers$ = new BehaviorSubject<Player[]>([]);
+  @Select(BalancerStateSelectors.getSecondTeam)
+  public secondTeam$!: Observable<Player[]>;
 
-  public secondTeamPlayers$ = new BehaviorSubject<Player[]>([]);
-
+  @Select(BalancerStateSelectors.getBaseGames)
   public baseGames$!: Observable<BaseGame[]>;
 
-  public selectedBaseGameId$ = new BehaviorSubject<number | null>(null);
-
+  @Select(BalancerStateSelectors.getCanShuffle)
   public canShuffle$!: Observable<boolean>;
 
-  @Output()
-  public playerRemoved = new EventEmitter<Player>();
+  @Select(BalancerStateSelectors.getSelectedBaseGameId)
+  public selectedBaseGameId$!: Observable<number>;
 
-  @Output()
-  public baseGameSelected = new EventEmitter<number>();
+  constructor(private store: Store) {}
 
-  constructor(private apiService: ApiService) {}
-
-  ngOnInit(): void {
-    this.players$.subscribe((players) => {
-      this.firstTeamPlayers$.next(players.filter((player, i) => i <= 4));
-      this.secondTeamPlayers$.next(players.filter((player, i) => i >= 5));
-    });
-
-    this.canShuffle$ = combineLatest([
-      this.firstTeamPlayers$,
-      this.secondTeamPlayers$,
-      this.selectedBaseGameId$,
-    ]).pipe(
-      map((data) => {
-        return data[0].length + data[1].length === 10 && !!data[2];
-      })
-    );
-
-    this.baseGames$ = this.apiService.getBaseGames$();
-  }
+  ngOnInit(): void {}
 
   public removePlayer(player: Player): void {
-    this.playerRemoved.emit(player);
+    this.store.dispatch(new RemovePlayer(player));
   }
 
-  public handleBaseGameChange(event: MatSelectChange): void {
-    this.selectedBaseGameId$.next(event.value);
-    this.baseGameSelected.emit(this.selectedBaseGameId$.value ?? 0);
-  }
-
-  public getElo(player: Player): number {
-    return (
-      player.games.find(
-        (game) => game.baseGame.id === this.selectedBaseGameId$.value
-      )?.elo ?? 0
+  public getElo$(player: Player): Observable<number> {
+    return this.selectedBaseGameId$.pipe(
+      map(
+        (baseGameId) =>
+          player.games.find((game) => game.baseGame.id === baseGameId)?.elo ?? 0
+      )
     );
   }
 
   public generateTeams(): void {
-    combineLatest([this.firstTeamPlayers$, this.secondTeamPlayers$])
-      .pipe(
-        mergeMap((data) => {
-          return this.apiService.generateTeams$(
-            this.selectedBaseGameId$.value ?? 0,
-            [
-              ...data[0].map((player) => player.id),
-              ...data[1].map((player) => player.id),
-            ]
-          );
-        }),
-        take(1)
-      )
-      .subscribe((response) => {
-        this.firstTeamPlayers$.next(response.firstTeamPlayers);
-        this.secondTeamPlayers$.next(response.secondTeamPlayers);
-      });
+    this.store.dispatch(new GenerateTeams());
+  }
+
+  public handleBaseGameChange(id: number): void {
+    this.store.dispatch(new SelectBaseGame(id));
   }
 }

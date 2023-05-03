@@ -1,13 +1,5 @@
 <div class="contianer">
-  <app-available-players-list
-    [players$]="availablePlayers$"
-    (playerSelected)="handlePlayerSelected($event)"
-    [disableAdd]="!!(disableAdd$ | async)"
-  ></app-available-players-list>
-  <app-teams-list
-    [players$]="selectedPlayers$"
-    (playerRemoved)="handlePlayerRemoved($event)"
-    (baseGameSelected)="handleBaseGameSelected($event)"
-  ></app-teams-list>
-  <app-maps-list [mapList]="(mapsList$ | async) ?? []"></app-maps-list>
+  <app-available-players-list></app-available-players-list>
+  <app-teams-list></app-teams-list>
+  <app-maps-list></app-maps-list>
 </div>

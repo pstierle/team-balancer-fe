@@ -1,7 +1,7 @@
 <div class="player-container">
   <button
     mat-stroked-button
-    *ngFor="let player of players$ | async"
+    *ngFor="let player of availablePlayers$ | async"
     (click)="selectPlayer(player)"
     [disabled]="disableAdd"
   >

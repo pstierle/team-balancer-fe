@@ -1,0 +1,16 @@
+<form [formGroup]="playerForm" (submit)="submit()">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput formControlName="name" />
+    <mat-error> Between 3 and 8 Chars </mat-error>
+  </mat-form-field>
+
+  <button
+    mat-stroked-button
+    color="primary"
+    type="submit"
+    [disabled]="!playerForm.valid"
+  >
+    Add
+  </button>
+</form>

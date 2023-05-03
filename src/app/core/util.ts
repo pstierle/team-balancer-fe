@@ -10,4 +10,14 @@ export class Util {
       image: `../../../../../assets/images/maps/${game}/${mapName}.jpg`,
     }));
   }
+
+  public static getColorByPlayerElo(elo: number): string {
+    return elo >= 8
+      ? 'rgb(241, 49, 49)'
+      : elo >= 5
+      ? 'rgb(238, 238, 97)'
+      : elo >= 3
+      ? 'rgb(13, 152, 245)'
+      : 'white';
+  }
 }
