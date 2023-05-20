@@ -7,8 +7,10 @@ export const endpoints = {
   baseGame: {
     basePath: 'base-game',
     generateTeams: 'generate-teams',
+    randomMap: 'random-map',
   },
   player: {
     basePath: 'player',
+    updateGame: 'update-game',
   },
 };

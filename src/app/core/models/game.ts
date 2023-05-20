@@ -1,7 +1,7 @@
 import { BaseGame } from './base-game';
 
 export interface Game {
-  id: string;
+  id: number;
   elo: number;
   baseGame: BaseGame;
 }

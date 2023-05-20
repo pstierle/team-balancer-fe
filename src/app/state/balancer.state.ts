@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { StateToken, State, Action, StateContext, Selector } from '@ngxs/store';
-import { Observable, tap, combineLatest } from 'rxjs';
+import { Observable, tap, combineLatest, of } from 'rxjs';
 import { BalancerStateModel } from './models/balancer-state.model';
 import { Player } from '../core/models/player';
 import { BalancerApiService } from '../core/services/balancer-api.service';
 import { BaseGame } from '../core/models/base-game';
+import { Map } from '../core/models/map';
 
 const BALANCER_STATE = 'balancerState';
 const BALANCER_STATE_TOKEN = new StateToken<BalancerStateModel>(BALANCER_STATE);
@@ -19,8 +20,8 @@ export class GetAllPlayers {
   constructor() {}
 }
 
-export class SelectPlayer {
-  public static type = `${BALANCER_STATE} SelectPlayer`;
+export class AddPlayer {
+  public static type = `${BALANCER_STATE} AddPlayer`;
   constructor(public player: Player) {}
 }
 
@@ -39,14 +40,31 @@ export class GenerateTeams {
   constructor() {}
 }
 
+export class GetRandomMap {
+  public static type = `${BALANCER_STATE} GetRandomMap`;
+  constructor() {}
+}
+
+export class ResetRandomMap {
+  public static type = `${BALANCER_STATE} ResetRandomMap`;
+  constructor() {}
+}
+
+export class ToogleMap {
+  public static type = `${BALANCER_STATE} ToogleMap`;
+  constructor(public map: Map) {}
+}
+
 @State<BalancerStateModel>({
   name: BALANCER_STATE_TOKEN,
   defaults: {
-    availablePlayers: [],
+    allPlayers: [],
     firstTeam: [],
     secondTeam: [],
     selectedBaseGameId: 0,
     baseGames: [],
+    randomMap: undefined,
+    selectedMaps: [],
   },
 })
 @Injectable()
@@ -61,7 +79,7 @@ export class BalancerState {
     ]).pipe(
       tap((data) => {
         ctx.patchState({
-          availablePlayers: data[0],
+          allPlayers: data[0],
           baseGames: data[1],
           firstTeam: [],
           secondTeam: [],
@@ -70,14 +88,67 @@ export class BalancerState {
     );
   }
 
-  @Action(SelectPlayer)
-  public selectPlayer(
+  @Action(GetRandomMap)
+  public getRandomMap(
     ctx: StateContext<BalancerStateModel>,
-    action: SelectPlayer
+    action: GetRandomMap
+  ): Observable<any> {
+    const state = ctx.getState();
+    return this.apiService
+      .getRandomMap({
+        maps: state.selectedMaps,
+      })
+      .pipe(
+        tap((data) => {
+          ctx.patchState({
+            randomMap: data,
+          });
+        })
+      );
+  }
+
+  @Action(ResetRandomMap)
+  public resetRandomMap(ctx: StateContext<BalancerStateModel>): any {
+    ctx.patchState({
+      randomMap: undefined,
+    });
+  }
+
+  @Action(ToogleMap)
+  public toogleMap(
+    ctx: StateContext<BalancerStateModel>,
+    action: ToogleMap
+  ): void {
+    const state = ctx.getState();
+    let selectedMaps = [...state.selectedMaps];
+    let index = selectedMaps.findIndex((m) => m.id === action.map.id);
+    if (index !== -1) {
+      selectedMaps.splice(index, 1);
+    } else {
+      selectedMaps = [...selectedMaps, action.map];
+    }
+
+    ctx.patchState({
+      selectedMaps,
+    });
+  }
+
+  @Action(AddPlayer)
+  public addPlayer(
+    ctx: StateContext<BalancerStateModel>,
+    action: AddPlayer
   ): void {
     const state = ctx.getState();
     let firstTeam = [...state.firstTeam];
     let secondTeam = [...state.secondTeam];
+
+    if (
+      firstTeam.length + secondTeam.length >= 10 ||
+      !!firstTeam.find((p) => p.id === action.player.id) ||
+      !!secondTeam.find((p) => p.id === action.player.id)
+    ) {
+      return;
+    }
 
     if (firstTeam.length < 5) {
       firstTeam.push(action.player);
@@ -86,9 +157,6 @@ export class BalancerState {
     }
 
     ctx.patchState({
-      availablePlayers: state.availablePlayers.filter(
-        (player) => player.id !== action.player.id
-      ),
       firstTeam,
       secondTeam,
     });
@@ -102,7 +170,6 @@ export class BalancerState {
     const state = ctx.getState();
 
     ctx.patchState({
-      availablePlayers: [...state.availablePlayers, action.player],
       firstTeam: state.firstTeam.filter(
         (player) => player.id !== action.player.id
       ),
@@ -117,8 +184,11 @@ export class BalancerState {
     ctx: StateContext<BalancerStateModel>,
     action: SelectBaseGame
   ): void {
+    const state = ctx.getState();
+
     ctx.patchState({
       selectedBaseGameId: action.id,
+      selectedMaps: state.baseGames.find((g) => g.id === action.id)?.maps,
     });
   }
 
@@ -146,8 +216,8 @@ export class BalancerState {
 @Injectable()
 export class BalancerStateSelectors {
   @Selector([BalancerState])
-  public static getAvailablePlayers(state: BalancerStateModel): Player[] {
-    return state.availablePlayers;
+  public static getAllPlayers(state: BalancerStateModel): Player[] {
+    return state.allPlayers;
   }
 
   @Selector([BalancerState])
@@ -166,13 +236,18 @@ export class BalancerStateSelectors {
   }
 
   @Selector([BalancerState])
-  public static getDisableAddPlayers(state: BalancerStateModel): boolean {
-    return state.firstTeam.length + state.secondTeam.length >= 10;
+  public static getSelectedBaseGameId(state: BalancerStateModel): number {
+    return state.selectedBaseGameId;
   }
 
   @Selector([BalancerState])
-  public static getSelectedBaseGameId(state: BalancerStateModel): number {
-    return state.selectedBaseGameId;
+  public static getRandomMap(state: BalancerStateModel): Map | undefined {
+    return state.randomMap;
+  }
+
+  @Selector([BalancerState])
+  public static getSelectedMaps(state: BalancerStateModel): Map[] {
+    return state.selectedMaps;
   }
 
   @Selector([BalancerState])

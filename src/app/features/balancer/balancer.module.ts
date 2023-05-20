@@ -7,9 +7,11 @@ import { TeamsListComponent } from './components/teams-list/teams-list.component
 import { SharedModule } from 'src/app/shared/shared.module';
 import { BalancerComponent } from './components/balancer/balancer.component';
 import { MapsListComponent } from './components/maps-list/maps-list.component';
+import { PlayerComponent } from './components/player/player.component';
+import { BaseGameListComponent } from './components/base-game-list/base-game-list.component';
 
 @NgModule({
-  declarations: [AvailablePlayersListComponent, TeamsListComponent, BalancerComponent, MapsListComponent],
+  declarations: [AvailablePlayersListComponent, TeamsListComponent, BalancerComponent, MapsListComponent, PlayerComponent, BaseGameListComponent],
   imports: [CommonModule, BalancerRoutingModule, SharedModule],
 })
 export class BalancerModule {}

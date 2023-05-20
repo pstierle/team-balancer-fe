@@ -16,6 +16,6 @@ export class AuthComponent implements OnInit {
       this.activatedRoute.snapshot.params['access_token']
     );
 
-    await this.router.navigate([appRoutes.balancer]);
+    await this.router.navigate([appRoutes.players]);
   }
 }

@@ -1,0 +1,10 @@
+<mat-chip-list>
+  <mat-chip
+    *ngFor="let baseGame of baseGames$ | async"
+    [selected]="(selectedBaseGameId$ | async) === baseGame.id"
+    (click)="handleBaseGameChange(baseGame.id)"
+  >
+    <span>{{ baseGame.name }}</span>
+    <img [src]="baseGame.icon" alt="icon" />
+  </mat-chip>
+</mat-chip-list>

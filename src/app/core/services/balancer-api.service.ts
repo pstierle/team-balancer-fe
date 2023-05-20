@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { Player } from '../models/player';
 import { BaseGame } from '../models/base-game';
 import { GenerateTeamsResponse } from '../models/responses/generate-teams-response';
+import { Map } from '../models/map';
+import { RandomMapRequest } from '../models/requests/random-map.request';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +36,15 @@ export class BalancerApiService {
       {
         baseGameId,
         playerIds,
+      }
+    );
+  }
+
+  public getRandomMap(request: RandomMapRequest): Observable<Map> {
+    return this.httpClient.post<Map>(
+      `${environment.apiUrl}/${endpoints.baseGame.basePath}/${endpoints.baseGame.randomMap}`,
+      {
+        ...request,
       }
     );
   }

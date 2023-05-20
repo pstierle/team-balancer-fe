@@ -1,0 +1,13 @@
+mat-chip {
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 5px;
+
+  img {
+    width: 30px;
+    height: 30px;
+  }
+}

@@ -1,12 +1,9 @@
-mat-sidenav-container {
-  width: 100vw;
-  height: calc(100vh - 64px);
+mat-sidenav-content {
+  height: 100vh;
+  width: calc(100vw - 145.8px);
 }
 
-.spacer {
-  margin: 0px 5px;
-}
-
-::ng-deep .mat-drawer-backdrop.mat-drawer-shown {
-  background-color: transparent !important;
+mat-slide-toggle {
+  padding: 0 16px;
+  height: 48px;
 }

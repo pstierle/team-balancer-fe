@@ -3,7 +3,6 @@ import { StateToken, State, Action, StateContext, Selector } from '@ngxs/store';
 import { Observable, tap } from 'rxjs';
 import { Player } from '../core/models/player';
 import { ManagePlayersStateModel } from './models/manage-players-state.model';
-import { UpdatePlayerRequest } from '../core/models/requests/update-player.request';
 import { CreatePlayerRequest } from '../core/models/requests/create-player.request';
 import { ManagePlayersApiService } from '../core/services/manage-players-api.service';
 
@@ -24,7 +23,7 @@ export class DeletePlayer {
 
 export class UpdatePlayer {
   public static type = `${MANAGE_PLAYERS_STATE} UpdatePlayer`;
-  constructor(public id: string, public request: UpdatePlayerRequest) {}
+  constructor(public request: Player) {}
 }
 
 export class CreatePlayer {
@@ -76,12 +75,13 @@ export class ManagePlayersState {
     ctx: StateContext<ManagePlayersStateModel>,
     action: UpdatePlayer
   ): Observable<any> {
-    return this.apiService.updatePlayer(action.id, action.request).pipe(
+    return this.apiService.updatePlayer(action.request).pipe(
       tap((player) => {
         const state = ctx.getState();
         let players = [...state.players];
-        const index = players.findIndex((player) => player.id === action.id);
-        players[index] = player;
+        const playerIndex = players.findIndex((p) => p.id === player.id);
+        players[playerIndex] = player;
+
         ctx.patchState({
           players,
         });

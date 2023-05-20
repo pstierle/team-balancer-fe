@@ -1,5 +1,4 @@
 * {
-  color: rgb(190, 190, 190);
 }
 
 html,
@@ -39,10 +38,56 @@ h5 {
 .mat-card,
 .mat-expansion-panel,
 .mat-drawer-inner-container {
-  background-color: rgb(53, 53, 53);
 }
 
-.text-accent {
-  color: white;
-  font-weight: 500;
+mat-progress-spinner {
+  width: 35px !important;
+  height: 35px !important;
+  svg {
+    width: 35px !important;
+    height: 35px !important;
+  }
+}
+
+@import "@angular/material/theming";
+@include mat-core();
+
+$fleet-light-primary: mat-palette($mat-indigo);
+$fleet-light-accent: mat-palette($mat-amber);
+$fleet-light-warn: mat-palette($mat-deep-orange);
+$fleet-light-theme: mat-light-theme(
+  $fleet-light-primary,
+  $fleet-light-accent,
+  $fleet-light-warn
+);
+
+$fleet-dark-primary: mat-palette($mat-blue-grey);
+$fleet-dark-accent: mat-palette($mat-amber, 900);
+$fleet-dark-warn: mat-palette($mat-deep-orange);
+$fleet-dark-theme: mat-dark-theme(
+  $fleet-dark-primary,
+  $fleet-dark-accent,
+  $fleet-dark-warn
+);
+
+@include angular-material-theme($fleet-light-theme);
+
+.dark-theme {
+  @include angular-material-theme($fleet-dark-theme);
+}
+
+.light-theme {
+  @include angular-material-theme($fleet-light-theme);
+}
+
+.dark-theme .mat-card {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark-theme .mat-chip.mat-standard-chip {
+  background-color: rgba(0, 0, 0, 0.178);
+}
+
+.dark-theme .mat-drawer {
+  background-color: rgba(0, 0, 0, 0.178);
 }

@@ -1,9 +1,18 @@
 .contianer {
-  width: 100vw;
-  height: calc(100vh - 64px);
+  height: 100vh;
+  width: calc(100vw - 145.8px);
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  flex-direction: column;
+  gap: 50px;
+
+  .content {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    overflow: auto;
+  }
 }

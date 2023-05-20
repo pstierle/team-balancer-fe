@@ -5,7 +5,6 @@ import { environment } from 'src/environments/environment';
 import { endpoints } from '../constants/endpoints.constant';
 import { Observable, map } from 'rxjs';
 import { Player } from '../models/player';
-import { UpdatePlayerRequest } from '../models/requests/update-player.request';
 
 @Injectable({
   providedIn: 'root',
@@ -31,19 +30,21 @@ export class ManagePlayersApiService {
     );
   }
 
-  public updatePlayer(
-    playerId: string,
-    request: UpdatePlayerRequest
-  ): Observable<Player> {
-    return this.httpClient.patch<Player>(
-      `${environment.apiUrl}/${endpoints.player.basePath}/${playerId}`,
+  public updatePlayer(request: Player): Observable<Player> {
+    return this.httpClient.put<Player>(
+      `${environment.apiUrl}/${endpoints.player.basePath}`,
       request
     );
   }
 
   public deletePlayer(id: string): Observable<any> {
     return this.httpClient.delete(
-      `${environment.apiUrl}/${endpoints.player.basePath}/${id}`
+      `${environment.apiUrl}/${endpoints.player.basePath}`,
+      {
+        body: {
+          id,
+        },
+      }
     );
   }
 }

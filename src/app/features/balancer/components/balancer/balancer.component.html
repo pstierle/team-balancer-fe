@@ -1,5 +1,19 @@
 <div class="contianer">
-  <app-available-players-list></app-available-players-list>
-  <app-teams-list></app-teams-list>
-  <app-maps-list></app-maps-list>
+  <mat-progress-spinner
+    *ngIf="isLoading$ | async; else content"
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+  <ng-template #content>
+    <div class="content">
+      <mat-card class="players">
+        <app-base-game-list></app-base-game-list>
+        <app-available-players-list></app-available-players-list>
+        <app-teams-list></app-teams-list>
+      </mat-card>
+      <mat-card class="maps">
+        <app-maps-list></app-maps-list>
+      </mat-card>
+    </div>
+  </ng-template>
 </div>

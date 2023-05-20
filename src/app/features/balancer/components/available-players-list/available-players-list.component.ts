@@ -1,9 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest, map } from 'rxjs';
 import { Player } from 'src/app/core/models/player';
-import { SelectPlayer } from 'src/app/state/balancer.state';
-import { AppStateModel } from 'src/app/state/models/app-state.model';
+import {
+  AddPlayer,
+  RemovePlayer,
+  BalancerStateSelectors,
+} from 'src/app/state/balancer.state';
 
 @Component({
   selector: 'app-available-players-list',
@@ -11,14 +14,28 @@ import { AppStateModel } from 'src/app/state/models/app-state.model';
   styleUrls: ['./available-players-list.component.scss'],
 })
 export class AvailablePlayersListComponent {
-  @Select((state: AppStateModel) => state.balancerState.availablePlayers)
-  public availablePlayers$!: Observable<Player[]>;
+  @Select(BalancerStateSelectors.getAllPlayers)
+  public allPlayers$!: Observable<Player[]>;
 
-  public disableAdd: boolean = false;
+  @Select(BalancerStateSelectors.getFirstTeam)
+  public firstTeam$!: Observable<Player[]>;
+
+  @Select(BalancerStateSelectors.getSecondTeam)
+  public secondTeam$!: Observable<Player[]>;
 
   constructor(private store: Store) {}
 
-  public selectPlayer(player: Player): void {
-    this.store.dispatch(new SelectPlayer(player));
+  public addPlayer(player: Player): void {
+    this.store.dispatch(new AddPlayer(player));
+  }
+
+  public removePlayer(player: Player): void {
+    this.store.dispatch(new RemovePlayer(player));
+  }
+
+  public isSelected$(player: Player): Observable<boolean> {
+    return combineLatest([this.firstTeam$, this.secondTeam$]).pipe(
+      map((data) => !![...data[0], ...data[1]].find((p) => p.id === player.id))
+    );
   }
 }

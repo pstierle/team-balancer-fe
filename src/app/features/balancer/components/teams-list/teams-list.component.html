@@ -1,59 +1,38 @@
-<mat-card>
-  <mat-card-content>
-    <div class="teams-container">
-      <div class="team">
-        <div class="player-container">
-          <button
-            *ngFor="let player of firstTeam$ | async"
-            mat-stroked-button
-            (click)="removePlayer(player)"
-          >
-            <div class="content">
-              <span>{{ player.name }}</span>
-              <span class="text-accent" [appPlayerElo]="getElo$(player)">{{
-                getElo$(player) | async
-              }}</span>
-            </div>
-          </button>
-        </div>
-      </div>
-      <div class="team">
-        <div class="player-container">
-          <button
-            *ngFor="let player of secondTeam$ | async"
-            mat-stroked-button
-            (click)="removePlayer(player)"
-          >
-            <div class="content">
-              <span>{{ player.name }}</span>
-              <span class="text-accent" [appPlayerElo]="getElo$(player)">{{
-                getElo$(player) | async
-              }}</span>
-            </div>
-          </button>
-        </div>
+<div class="teams-container">
+  <mat-progress-spinner
+    *ngIf="isLoading$ | async; else content"
+    color="primary"
+    mode="indeterminate"
+  ></mat-progress-spinner>
+  <ng-template #content>
+    <div class="team" *ngIf="firstTeam$ | async as firstTeam">
+      <app-player *ngFor="let player of firstTeam" [player]="player">
+      </app-player>
+      <div class="total" *ngIf="firstTeam.length">
+        <span>{{ firstTeam.length }}/5</span><span>-</span><span>Total:</span>
+        <p>{{ getPlayersEloSum$(firstTeam) | async }}</p>
       </div>
     </div>
-  </mat-card-content>
-  <mat-card-actions>
-    <div class="actions">
-      <mat-chip-list>
-        <mat-chip
-          *ngFor="let baseGame of baseGames$ | async"
-          [selected]="(selectedBaseGameId$ | async) === baseGame.id"
-          (click)="handleBaseGameChange(baseGame.id)"
-        >
-          {{ baseGame.name }}
-        </mat-chip>
-      </mat-chip-list>
-      <button
-        mat-stroked-button
-        color="primary"
-        [disabled]="!(canShuffle$ | async)"
-        (click)="generateTeams()"
-      >
-        Generate Teams
-      </button>
+    <div class="team" *ngIf="secondTeam$ | async as secondTeam">
+      <app-player
+        *ngFor="let player of secondTeam"
+        [player]="player"
+      ></app-player>
+      <div class="total" *ngIf="secondTeam.length">
+        <span>{{ secondTeam.length }}/5</span>
+        <span>-</span>
+        <span>Total:</span>
+        <p>{{ getPlayersEloSum$(secondTeam) | async }}</p>
+      </div>
     </div>
-  </mat-card-actions>
-</mat-card>
+  </ng-template>
+</div>
+
+<button
+  mat-raised-button
+  color="primary"
+  [disabled]="!(canShuffle$ | async)"
+  (click)="generateTeams()"
+>
+  Generate Teams
+</button>

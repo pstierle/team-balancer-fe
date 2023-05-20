@@ -1,0 +1,4 @@
+<div class="content" [appEloBackground]="elo$">
+  <span>{{ player.name }}</span>
+  <span class="text-accent">{{ elo$ | async }}</span>
+</div>

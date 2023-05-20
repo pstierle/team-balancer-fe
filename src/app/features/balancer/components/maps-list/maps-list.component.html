@@ -1,14 +1,47 @@
 <div class="container">
-  <div
-    *ngFor="let map of mapList$ | async; let i = index"
-    [id]="'map-' + i"
-    class="map"
-    [class.highlight]="highlightedMapIndex === i"
-  >
-    <span [class.text-accent]="highlightedMapIndex === i">{{ map.name }}</span>
-    <img [src]="map.image" alt="map" />
+  <div class="spinner-container" *ngIf="isLoading$ | async; else content">
+    <mat-progress-spinner
+      color="primary"
+      mode="indeterminate"
+    ></mat-progress-spinner>
   </div>
+
+  <ng-template #content>
+    <ng-container *ngIf="randomMap$ | async as map; else mapList">
+      <div class="random-map">
+        <span>{{ map.name }}</span>
+        <img [src]="map.image" alt="map" />
+      </div>
+      <button mat-raised-button color="primary" (click)="resetRandomMap()">
+        Go to Maplist
+      </button>
+    </ng-container>
+
+    <ng-template #mapList>
+      <p *ngIf="(mapList$ | async)?.length === 0; else maps">
+        Selected Game has no maps.
+      </p>
+      <ng-template #maps>
+        <div class="maps">
+          <div
+            *ngFor="let map of mapList$ | async; let i = index"
+            class="map"
+            (click)="toogleMap(map)"
+          >
+            <span>{{ map.name }}</span>
+            <div class="image-container">
+              <img [src]="map.image" alt="map" />
+              <div class="not-selected" *ngIf="!(isSelected$(map.id) | async)">
+                <span>X</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button mat-raised-button color="primary" (click)="getRandomMap()">
+          Generate Random Map
+        </button>
+      </ng-template>
+    </ng-template>
+  </ng-template>
 </div>
-<button mat-stroked-button color="primary" (click)="highlightRandomMap()">
-  Random
-</button>

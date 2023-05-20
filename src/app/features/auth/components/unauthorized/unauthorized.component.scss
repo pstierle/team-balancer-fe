@@ -1,7 +1,17 @@
 .contianer {
-  width: 100vw;
-  height: calc(100vh - 64px);
+  height: 100vh;
+  width: calc(100vw - 145.8px);
   display: flex;
   align-items: center;
   justify-content: center;
+
+  h3 {
+    margin: 0;
+  }
+
+  .login-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 }

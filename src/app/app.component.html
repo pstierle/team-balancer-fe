@@ -1,14 +1,11 @@
-<mat-toolbar>
-  <button mat-icon-button (click)="sidenav.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <span>Team Balancer</span>
-  <span class="spacer"></span>
-  <button mat-stroked-button (click)="login()">Login</button>
-</mat-toolbar>
 <mat-sidenav-container>
-  <mat-sidenav #sidenav mode="over" [(opened)]="sideNavOpen">
+  <mat-sidenav mode="side" [opened]="true">
     <mat-nav-list>
+      <mat-slide-toggle
+        [checked]="darkMode$ | async"
+        (change)="handleDarkModeChange($event)"
+        >Dark Mode</mat-slide-toggle
+      >
       <a
         mat-list-item
         [routerLink]="[appRoutes.players]"

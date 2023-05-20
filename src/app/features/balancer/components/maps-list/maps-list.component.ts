@@ -1,42 +1,69 @@
-import { Component, Input } from '@angular/core';
-import { Select } from '@ngxs/store';
-import { Observable, map } from 'rxjs';
-import { csgoMaps } from 'src/app/core/constants/csgo-maps.constant';
-import { valorantMaps } from 'src/app/core/constants/valorant-maps.constant';
+import { Component, OnInit } from '@angular/core';
+import { Actions, Select, Store } from '@ngxs/store';
+import { Observable, combineLatest, map } from 'rxjs';
+import { LoadingObserver } from 'src/app/core/loading-observer';
+import { BaseGame } from 'src/app/core/models/base-game';
 import { Map } from 'src/app/core/models/map';
-import { Util } from 'src/app/core/util';
-import { BalancerStateSelectors } from 'src/app/state/balancer.state';
+import {
+  BalancerStateSelectors,
+  GetRandomMap,
+  ResetRandomMap,
+  ToogleMap,
+} from 'src/app/state/balancer.state';
 
 @Component({
   selector: 'app-maps-list',
   templateUrl: './maps-list.component.html',
   styleUrls: ['./maps-list.component.scss'],
 })
-export class MapsListComponent {
+export class MapsListComponent extends LoadingObserver implements OnInit {
   @Select(BalancerStateSelectors.getSelectedBaseGameId)
   public selectedBaseGameId$!: Observable<number>;
 
-  public mapList$: Observable<Map[]> = this.selectedBaseGameId$.pipe(
-    map((id) => {
-      if (id === 1) {
-        return Util.mapsWithImagePath('valorant', valorantMaps);
-      }
-      if (id === 3) {
-        return Util.mapsWithImagePath('csgo', csgoMaps);
-      }
-      return [];
+  @Select(BalancerStateSelectors.getBaseGames)
+  public baseGames$!: Observable<BaseGame[]>;
+
+  @Select(BalancerStateSelectors.getRandomMap)
+  public randomMap$!: Observable<Map>;
+
+  @Select(BalancerStateSelectors.getSelectedMaps)
+  public selectedMaps$!: Observable<Map[]>;
+
+  public mapList$: Observable<Map[]> = combineLatest([
+    this.selectedBaseGameId$,
+    this.baseGames$,
+  ]).pipe(
+    map((data) => {
+      const selectedBaseGameId = data[0];
+      const baseGames = data[1];
+
+      return baseGames.find((b) => b.id === selectedBaseGameId)?.maps ?? [];
     })
   );
 
-  public highlightedMapIndex: number = -1;
+  constructor(private store: Store, actions: Actions) {
+    super(actions);
+  }
 
-  public highlightRandomMap(): void {
-    const randomIndex = Math.floor(Math.random() * 10);
-    this.highlightedMapIndex = randomIndex;
-    document.getElementById('map-' + randomIndex)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-      inline: 'center',
-    });
+  public ngOnInit(): void {
+    this.observeLoadingActions([GetRandomMap]);
+  }
+
+  public getRandomMap(): void {
+    this.store.dispatch(new GetRandomMap());
+  }
+
+  public resetRandomMap(): void {
+    this.store.dispatch(new ResetRandomMap());
+  }
+
+  public toogleMap(map: Map): void {
+    this.store.dispatch(new ToogleMap(map));
+  }
+
+  public isSelected$(id: number): Observable<boolean> {
+    return this.selectedMaps$.pipe(
+      map((maps) => !!maps.find((m) => m.id === id))
+    );
   }
 }

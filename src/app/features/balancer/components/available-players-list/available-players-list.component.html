@@ -1,10 +1,15 @@
 <div class="player-container">
-  <button
-    mat-stroked-button
-    *ngFor="let player of availablePlayers$ | async"
-    (click)="selectPlayer(player)"
-    [disabled]="disableAdd"
-  >
-    {{ player.name }}
-  </button>
+  <mat-chip-list multiple selectable>
+    <mat-chip
+      *ngFor="let player of allPlayers$ | async"
+      (removed)="removePlayer(player)"
+      (click)="addPlayer(player)"
+      [selected]="isSelected$(player) | async"
+    >
+      {{ player.name }}
+      <button matChipRemove *ngIf="isSelected$(player) | async">
+        <mat-icon>cancel</mat-icon>
+      </button>
+    </mat-chip>
+  </mat-chip-list>
 </div>

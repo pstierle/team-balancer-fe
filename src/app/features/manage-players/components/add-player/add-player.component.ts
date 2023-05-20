@@ -26,6 +26,8 @@ export class AddPlayerComponent {
           name: this.playerForm.controls.name.value,
         })
       );
+      this.playerForm.controls.name.patchValue('');
+      this.playerForm.setErrors(null);
     }
   }
 }

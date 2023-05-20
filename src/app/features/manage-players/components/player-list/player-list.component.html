@@ -1,22 +1,36 @@
-<mat-card>
+<mat-progress-spinner
+  color="primary"
+  mode="indeterminate"
+  *ngIf="isLoading$ | async; else content"
+></mat-progress-spinner>
+<ng-template #content>
   <div class="scrollable">
-    <div class="player" *ngFor="let player of players$ | async">
+    <mat-card *ngFor="let player of playersWithNameControl$ | async">
       <div class="player-header">
-        <span class="player-name">{{ player.name }}</span>
+        <mat-form-field *ngIf="player.nameControl">
+          <input
+            matInput
+            [formControl]="player.nameControl"
+            [value]="player.name"
+            (blur)="updatePlayerName(player)"
+          />
+          <mat-error> Between 3 and 8 Chars </mat-error>
+        </mat-form-field>
         <mat-icon (click)="deletePlayer(player.id)">delete</mat-icon>
       </div>
       <div class="games">
         <div class="game" *ngFor="let game of player.games">
-          <span>{{ game.baseGame.name }}:</span>
+          <img [src]="game.baseGame.icon" alt="icon" />
           <input
             type="number"
+            [appEloBackground]="getElo$(game.elo)"
             min="0"
             max="10"
             [value]="game.elo"
-            (blur)="updatePlayerGameElo(player.id, game.id, $event)"
+            (blur)="updatePlayerGameElo(player, game.id, $event)"
           />
         </div>
       </div>
-    </div>
+    </mat-card>
   </div>
-</mat-card>
+</ng-template>
