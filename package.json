@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "start:prod": "ng build && node server.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
     "@ngxs/store": "^3.8.0",
+    "express": "^4.18.2",
     "ngx-mask": "^15.1.2",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",

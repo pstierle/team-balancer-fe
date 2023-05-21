@@ -18,9 +18,12 @@
     </ng-container>
 
     <ng-template #mapList>
-      <p *ngIf="(mapList$ | async)?.length === 0; else maps">
-        Selected Game has no maps.
-      </p>
+      <div *ngIf="(mapList$ | async)?.length === 1; else maps">
+        <div class="random-map" *ngFor="let map of mapList$ | async">
+          <span>{{ map.name }}</span>
+          <img [src]="map.image" alt="map" />
+        </div>
+      </div>
       <ng-template #maps>
         <div class="maps">
           <div

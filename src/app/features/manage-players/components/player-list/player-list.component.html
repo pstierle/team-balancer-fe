@@ -1,10 +1,10 @@
-<mat-progress-spinner
-  color="primary"
-  mode="indeterminate"
-  *ngIf="isLoading$ | async; else content"
-></mat-progress-spinner>
-<ng-template #content>
-  <div class="scrollable">
+<div class="scrollable">
+  <mat-progress-spinner
+    color="primary"
+    mode="indeterminate"
+    *ngIf="isLoading$ | async; else content"
+  ></mat-progress-spinner>
+  <ng-template #content>
     <mat-card *ngFor="let player of playersWithNameControl$ | async">
       <div class="player-header">
         <mat-form-field *ngIf="player.nameControl">
@@ -32,5 +32,5 @@
         </div>
       </div>
     </mat-card>
-  </div>
-</ng-template>
+  </ng-template>
+</div>

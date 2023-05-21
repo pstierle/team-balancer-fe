@@ -27,8 +27,6 @@ export class AppComponent implements OnInit {
       }
     }
 
-    console.log(this.darkMode$.value);
-
     this.darkMode$.subscribe((darkMode) => {
       if (darkMode) {
         this.theme = 'dark-theme';
