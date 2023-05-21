@@ -9,5 +9,4 @@ app.get('*', function (req, res) {
   res.sendFile(path.join(__dirname, 'dist', 'team-balancer-fe', 'index.html'));
 });
 
-app.listen(port);
-console.log('Server started at http://localhost:' + port);
+app.listen(port, '0.0.0.0');
