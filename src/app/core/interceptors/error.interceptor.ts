@@ -9,10 +9,16 @@ import {
 import { Observable, catchError, of, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { appRoutes } from '../constants/app-routes.constant';
+import { endpoints } from '../constants/endpoints.constant';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private router: Router, private zone: NgZone) {}
+  constructor(
+    private router: Router,
+    private zone: NgZone,
+    private snackBar: MatSnackBar
+  ) {}
   intercept(
     httpRequest: HttpRequest<any>,
     next: HttpHandler
@@ -23,6 +29,21 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.zone.run(() => {
             this.router.navigate(['', appRoutes.auth]);
           });
+        }
+        if (httpRequest.url.includes(endpoints.player.basePath)) {
+          if (error.status === 409) {
+            this.snackBar.open('Player names must be unique.', 'Error', {
+              duration: 4000,
+            });
+          } else {
+            this.snackBar.open(
+              'Internal server error try again later.',
+              'Error',
+              {
+                duration: 4000,
+              }
+            );
+          }
         }
         return of();
       })

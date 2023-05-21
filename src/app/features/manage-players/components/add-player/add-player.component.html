@@ -2,7 +2,9 @@
   <mat-form-field>
     <mat-label>Name</mat-label>
     <input matInput formControlName="name" />
-    <mat-error> Between 3 and 8 Chars </mat-error>
+    <mat-error *ngIf="playerForm.controls.name.touched">
+      Between 3 and 8 Chars
+    </mat-error>
   </mat-form-field>
 
   <button

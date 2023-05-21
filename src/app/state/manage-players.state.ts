@@ -1,3 +1,4 @@
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Injectable } from '@angular/core';
 import { StateToken, State, Action, StateContext, Selector } from '@ngxs/store';
 import { Observable, tap } from 'rxjs';
@@ -39,7 +40,10 @@ export class CreatePlayer {
 })
 @Injectable()
 export class ManagePlayersState {
-  constructor(private apiService: ManagePlayersApiService) {}
+  constructor(
+    private apiService: ManagePlayersApiService,
+    private snackBar: MatSnackBar
+  ) {}
 
   @Action(GetPlayers)
   public getPlayers(
@@ -62,6 +66,10 @@ export class ManagePlayersState {
     return this.apiService.deletePlayer(action.id).pipe(
       tap(() => {
         const state = ctx.getState();
+        const deletedPlayerName = state.players.find(
+          (p) => p.id === action.id
+        )?.name;
+        this.openSnackBar(`${deletedPlayerName} successfully deleted!`);
 
         ctx.patchState({
           players: state.players.filter((player) => player.id !== action.id),
@@ -80,6 +88,10 @@ export class ManagePlayersState {
         const state = ctx.getState();
         let players = [...state.players];
         const playerIndex = players.findIndex((p) => p.id === player.id);
+        const oldName = players[playerIndex].name;
+        const newName = player.name;
+        this.openSnackBar(`Successfully renamed ${oldName} to ${newName}!`);
+
         players[playerIndex] = player;
 
         ctx.patchState({
@@ -96,6 +108,7 @@ export class ManagePlayersState {
   ): Observable<any> {
     return this.apiService.createPlayer(action.request).pipe(
       tap((player) => {
+        this.openSnackBar(`${player.name} successfully created!`);
         const state = ctx.getState();
         ctx.patchState({
           players: [...state.players, player].sort((a, b) =>
@@ -104,6 +117,12 @@ export class ManagePlayersState {
         });
       })
     );
+  }
+
+  private openSnackBar(message: string): void {
+    this.snackBar.open(message, 'Success', {
+      duration: 4000,
+    });
   }
 }
 

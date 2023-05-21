@@ -27,7 +27,14 @@ export class AddPlayerComponent {
         })
       );
       this.playerForm.controls.name.patchValue('');
+      this.playerForm.controls.name.markAsUntouched();
+      this.playerForm.controls.name.markAsPristine();
+      this.playerForm.markAsUntouched();
+      this.playerForm.markAsPristine();
       this.playerForm.setErrors(null);
+      this.playerForm.controls.name.setErrors(null);
+      this.playerForm.updateValueAndValidity();
+      this.playerForm.controls.name.updateValueAndValidity();
     }
   }
 }
