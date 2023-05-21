@@ -88,9 +88,7 @@ export class ManagePlayersState {
         const state = ctx.getState();
         let players = [...state.players];
         const playerIndex = players.findIndex((p) => p.id === player.id);
-        const oldName = players[playerIndex].name;
-        const newName = player.name;
-        this.openSnackBar(`Successfully renamed ${oldName} to ${newName}!`);
+        this.openSnackBar(`Successfully edited ${player.name}!`);
 
         players[playerIndex] = player;
 
