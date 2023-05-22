@@ -35,14 +35,6 @@ export class ErrorInterceptor implements HttpInterceptor {
             this.snackBar.open('Player names must be unique.', 'Error', {
               duration: 4000,
             });
-          } else {
-            this.snackBar.open(
-              'Internal server error try again later.',
-              'Error',
-              {
-                duration: 4000,
-              }
-            );
           }
         }
         return of();
