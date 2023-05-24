@@ -29,4 +29,8 @@ export class LayoutService {
         }
       });
   }
+
+  public openSideNav(): void {
+    this.sideNav.open();
+  }
 }

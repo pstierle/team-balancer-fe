@@ -1,9 +1,8 @@
 import { LayoutService } from './core/services/layout.service';
 import {
-  AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   HostBinding,
-  HostListener,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -16,10 +15,13 @@ import { MatSidenav } from '@angular/material/sidenav';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
   @ViewChild(MatSidenav)
-  public sideNav!: MatSidenav;
+  public set sideNav(sideNav: MatSidenav) {
+    this.layoutService.init(sideNav);
+  }
 
   @HostBinding('class')
   public theme = 'light-theme';
@@ -54,15 +56,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     });
   }
 
-  public ngAfterViewInit(): void {
-    this.layoutService.init(this.sideNav);
-  }
-
   public handleDarkModeChange(event: MatSlideToggleChange): void {
     this.darkMode$.next(event.checked);
   }
 
   public showMenu(): void {
-    this.sideNav.open();
+    this.layoutService.openSideNav();
   }
 }
