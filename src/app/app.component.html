@@ -1,5 +1,5 @@
 <mat-sidenav-container>
-  <mat-sidenav mode="side" [opened]="true">
+  <mat-sidenav [mode]="(sideNavMode$ | async) ?? 'over'" [opened]="true">
     <mat-nav-list>
       <mat-slide-toggle
         [checked]="darkMode$ | async"
@@ -21,7 +21,14 @@
     </mat-nav-list>
   </mat-sidenav>
 
-  <mat-sidenav-content>
-    <router-outlet></router-outlet>
+  <mat-sidenav-content [class.medium]="showSideNavButton$ | async">
+    <button
+      mat-icon-button
+      class="menu-button"
+      (click)="showMenu()"
+      *ngIf="showSideNavButton$ | async"
+    >
+      <mat-icon color="primary">menu</mat-icon></button
+    ><router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

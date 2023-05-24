@@ -1,9 +1,19 @@
 mat-sidenav-content {
   height: 100vh;
   width: calc(100vw - 145.8px);
+
+  &.medium {
+    width: 100%;
+  }
 }
 
 mat-slide-toggle {
   padding: 0 16px;
   height: 48px;
+}
+
+.menu-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }

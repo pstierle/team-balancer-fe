@@ -81,13 +81,17 @@ $fleet-dark-theme: mat-dark-theme(
 }
 
 .dark-theme .mat-card {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgb(43, 43, 43);
 }
 
 .dark-theme .mat-chip.mat-standard-chip {
-  background-color: rgba(0, 0, 0, 0.178);
+  background-color: rgb(65, 65, 65);
 }
 
 .dark-theme .mat-drawer {
-  background-color: rgba(0, 0, 0, 0.178);
+  background-color: rgb(43, 43, 43);
+}
+
+.dark-theme .mat-drawer-backdrop.mat-drawer-shown {
+  background-color: transparent !important;
 }
