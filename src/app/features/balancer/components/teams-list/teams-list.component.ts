@@ -1,5 +1,5 @@
 import { Observable, map } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Player } from 'src/app/core/models/player';
 import { Actions, Select, Store } from '@ngxs/store';
 import {
@@ -12,6 +12,7 @@ import { LoadingObserver } from 'src/app/core/loading-observer';
   selector: 'app-teams-list',
   templateUrl: './teams-list.component.html',
   styleUrls: ['./teams-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeamsListComponent extends LoadingObserver implements OnInit {
   @Select(BalancerStateSelectors.getFirstTeam)

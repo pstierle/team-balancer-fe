@@ -10,4 +10,5 @@ export interface BalancerStateModel {
   baseGames: BaseGame[];
   randomMap?: Map;
   selectedMaps: Map[];
+  resultsText?: string;
 }
