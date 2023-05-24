@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { BaseGame } from 'src/app/core/models/base-game';
@@ -12,6 +12,7 @@ import {
   selector: 'app-base-game-list',
   templateUrl: './base-game-list.component.html',
   styleUrls: ['./base-game-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaseGameListComponent implements OnInit {
   @Select(BalancerStateSelectors.getBaseGames)

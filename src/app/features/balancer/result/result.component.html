@@ -1,0 +1,12 @@
+<button
+  mat-raised-button
+  color="primary"
+  [disabled]="(canCopyResults$ | async) === false"
+  (click)="copyResultsText()"
+>
+  <mat-icon>share</mat-icon>
+  Generate results text
+</button>
+<div *ngIf="resultsText$ | async">
+  {{ resultsText$ | async }}
+</div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable, combineLatest, map } from 'rxjs';
 import { Player } from 'src/app/core/models/player';
@@ -12,6 +12,7 @@ import {
   selector: 'app-available-players-list',
   templateUrl: './available-players-list.component.html',
   styleUrls: ['./available-players-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvailablePlayersListComponent {
   @Select(BalancerStateSelectors.getAllPlayers)

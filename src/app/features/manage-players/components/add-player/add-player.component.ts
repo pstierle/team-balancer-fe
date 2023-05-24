@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { CreatePlayer } from 'src/app/state/manage-players.state';
@@ -7,6 +7,7 @@ import { CreatePlayer } from 'src/app/state/manage-players.state';
   selector: 'app-add-player',
   templateUrl: './add-player.component.html',
   styleUrls: ['./add-player.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddPlayerComponent {
   public playerForm = this.formBuilder.group({

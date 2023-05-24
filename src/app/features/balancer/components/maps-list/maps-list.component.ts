@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Actions, Select, Store } from '@ngxs/store';
 import { Observable, combineLatest, map } from 'rxjs';
 import { LoadingObserver } from 'src/app/core/loading-observer';
@@ -15,6 +15,7 @@ import {
   selector: 'app-maps-list',
   templateUrl: './maps-list.component.html',
   styleUrls: ['./maps-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MapsListComponent extends LoadingObserver implements OnInit {
   @Select(BalancerStateSelectors.getSelectedBaseGameId)

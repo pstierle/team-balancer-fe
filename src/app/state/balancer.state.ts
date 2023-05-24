@@ -55,6 +55,11 @@ export class ToogleMap {
   constructor(public map: Map) {}
 }
 
+export class GenerateResultsText {
+  public static type = `${BALANCER_STATE} GenerateResultsText`;
+  constructor() {}
+}
+
 @State<BalancerStateModel>({
   name: BALANCER_STATE_TOKEN,
   defaults: {
@@ -86,6 +91,31 @@ export class BalancerState {
         });
       })
     );
+  }
+
+  @Action(GenerateResultsText)
+  public generateResultsText(ctx: StateContext<BalancerStateModel>): any {
+    const state = ctx.getState();
+    const baseGame = state.baseGames.find(
+      (g) => g.id === state.selectedBaseGameId
+    );
+    let text = `Selected Game: ${baseGame?.name}\n`;
+    if (state.randomMap) {
+      text += `Map: ${state.randomMap.name}\n`;
+    }
+    text += 'First Team:\n';
+    state.firstTeam.forEach((player, i) => {
+      text += `${i + 1}. ${player.name}\n`;
+    });
+
+    text += 'Second Team:\n';
+    state.secondTeam.forEach((player, i) => {
+      text += `${i + 1}. ${player.name}\n`;
+    });
+
+    ctx.patchState({
+      resultsText: text,
+    });
   }
 
   @Action(GetRandomMap)
@@ -248,6 +278,20 @@ export class BalancerStateSelectors {
   @Selector([BalancerState])
   public static getSelectedMaps(state: BalancerStateModel): Map[] {
     return state.selectedMaps;
+  }
+
+  @Selector([BalancerState])
+  public static getResultsText(state: BalancerStateModel): string | undefined {
+    return state.resultsText;
+  }
+
+  @Selector([BalancerState])
+  public static canCopyResults(state: BalancerStateModel): boolean {
+    return (
+      !!state.randomMap &&
+      state.firstTeam.length === 5 &&
+      state.secondTeam.length === 5
+    );
   }
 
   @Selector([BalancerState])

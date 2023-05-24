@@ -15,5 +15,16 @@
     flex-wrap: wrap;
     justify-content: center;
     overflow: auto;
+
+    .right-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+
+      button {
+        margin-top: 16px;
+      }
+    }
   }
 }

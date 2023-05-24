@@ -1,5 +1,5 @@
 import { Observable, map, of } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Actions, Select, Store } from '@ngxs/store';
 import {
   CreatePlayer,
@@ -21,6 +21,7 @@ interface PlayerWithNameControl extends Player {
   selector: 'app-player-list',
   templateUrl: './player-list.component.html',
   styleUrls: ['./player-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerListComponent extends LoadingObserver implements OnInit {
   @Select(ManagePlayersStateSelectors.getPlayers)
