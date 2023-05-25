@@ -7,6 +7,6 @@
   <mat-icon>share</mat-icon>
   Generate results text
 </button>
-<div *ngIf="resultsText$ | async">
+<p *ngIf="resultsText$ | async" class="content-text">
   {{ resultsText$ | async }}
-</div>
+</p>
