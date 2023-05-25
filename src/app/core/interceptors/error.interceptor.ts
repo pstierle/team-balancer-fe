@@ -37,6 +37,13 @@ export class ErrorInterceptor implements HttpInterceptor {
             });
           }
         }
+        if (httpRequest.url.includes(endpoints.baseGame.randomMap)) {
+          if (error.status === 400) {
+            this.snackBar.open('Select at least one game.', 'Error', {
+              duration: 4000,
+            });
+          }
+        }
         return of();
       })
     );
