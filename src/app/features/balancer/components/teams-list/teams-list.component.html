@@ -1,9 +1,11 @@
 <div class="teams-container">
-  <mat-progress-spinner
-    *ngIf="isLoading$ | async; else content"
-    color="primary"
-    mode="indeterminate"
-  ></mat-progress-spinner>
+  <div class="spinner-container" *ngIf="isLoading$ | async; else content">
+    <mat-progress-spinner
+      color="primary"
+      mode="indeterminate"
+    ></mat-progress-spinner>
+  </div>
+
   <ng-template #content>
     <div class="team" *ngIf="firstTeam$ | async as firstTeam">
       <app-player *ngFor="let player of firstTeam" [player]="player">
