@@ -70,6 +70,7 @@ export class GenerateResultsText {
     baseGames: [],
     randomMap: undefined,
     selectedMaps: [],
+    resultsText: undefined,
   },
 })
 @Injectable()
@@ -88,6 +89,10 @@ export class BalancerState {
           baseGames: data[1],
           firstTeam: [],
           secondTeam: [],
+          selectedBaseGameId: 0,
+          randomMap: undefined,
+          selectedMaps: [],
+          resultsText: undefined,
         });
       })
     );
@@ -100,17 +105,19 @@ export class BalancerState {
       (g) => g.id === state.selectedBaseGameId
     );
     let text = `Selected Game: ${baseGame?.name}\n`;
+    text += '\n';
     if (state.randomMap) {
-      text += `Map: ${state.randomMap.name}\n`;
+      text += ` Map: ${state.randomMap.name}\n`;
     }
-    text += 'First Team:\n';
+    text += '\n';
+    text += ' First Team:\n';
     state.firstTeam.forEach((player, i) => {
-      text += `${i + 1}. ${player.name}\n`;
+      text += `  ${i + 1}. ${player.name}\n`;
     });
-
-    text += 'Second Team:\n';
+    text += '\n';
+    text += ' Second Team:\n';
     state.secondTeam.forEach((player, i) => {
-      text += `${i + 1}. ${player.name}\n`;
+      text += `  ${i + 1}. ${player.name}\n`;
     });
 
     ctx.patchState({
